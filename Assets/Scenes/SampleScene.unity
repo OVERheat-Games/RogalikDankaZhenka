@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 215884104}
   - component: {fileID: 215884103}
   - component: {fileID: 215884101}
+  - component: {fileID: 215884105}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -159,6 +160,14 @@ MonoBehaviour:
   shootCooldown: 0.5
   shootSpeed: 10
   tearLifetime: 2
+  moveUpKey: 119
+  moveDownKey: 115
+  moveLeftKey: 97
+  moveRightKey: 100
+  shootLeftKey: 276
+  shootRightKey: 275
+  shootUpKey: 273
+  shootDownKey: 274
 --- !u!4 &215884102
 Transform:
   m_ObjectHideFlags: 0
@@ -248,6 +257,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 8.694229, y: 10.369533}
   m_EdgeRadius: 0
+--- !u!95 &215884105
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215884100}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 308f3ed5c288f6049bcf054042ac3d2a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &414918758
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,83 +1,116 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5.0f;
-    public GameObject tearPrefab;
-    public float shootCooldown = 0.5f;
-    public float shootSpeed = 10.0f;
-    public float tearLifetime = 2.0f;
+    [SerializeField]
+    private float moveSpeed = 5.0f;
+    [SerializeField]
+    private GameObject tearPrefab;
+    [SerializeField]
+    private float shootCooldown = 0.5f;
+    [SerializeField]
+    private float shootSpeed = 10.0f;
+    [SerializeField]
+    private float tearLifetime = 2.0f;
+
     private float lastShootTime;
     private Rigidbody2D rb;
+    private Animator animator;
+
+    // Клавиши управления
+    public KeyCode moveUpKey = KeyCode.W;
+    public KeyCode moveDownKey = KeyCode.S;
+    public KeyCode moveLeftKey = KeyCode.A;
+    public KeyCode moveRightKey = KeyCode.D;
+
+    // Клавиши стрельбы
+    public KeyCode shootLeftKey = KeyCode.LeftArrow;
+    public KeyCode shootRightKey = KeyCode.RightArrow;
+    public KeyCode shootUpKey = KeyCode.UpArrow;
+    public KeyCode shootDownKey = KeyCode.DownArrow;
+
+    // Эффекты предметов
+    private float damageBoost = 1.0f;
+    private float fireRateBoost = 1.0f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        // Управление движением
-        float moveX = 0;
-        float moveY = 0;
+        Move();
+        Shoot();
+    }
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            moveY = 1;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            moveY = -1;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveX = -1;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            moveX = 1;
-        }
+    void Move()
+    {
+        float moveX = GetAxis(moveLeftKey, moveRightKey);
+        float moveY = GetAxis(moveDownKey, moveUpKey);
 
         Vector2 moveDirection = new Vector2(moveX, moveY).normalized;
         rb.velocity = moveDirection * moveSpeed;
 
-        // Управление выстрелами
-        Vector2 shootDirection = Vector2.zero;
+        // Обновление анимаций
+        animator.SetFloat("MoveX", moveDirection.x);
+        animator.SetFloat("MoveY", moveDirection.y);
+    }
 
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            shootDirection += Vector2.left;
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            shootDirection += Vector2.right;
-        }
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            shootDirection += Vector2.up;
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            shootDirection += Vector2.down;
-        }
+    void Shoot()
+    {
+        Vector2 shootDirection = GetShootingDirection();
 
         if (shootDirection != Vector2.zero && Time.time - lastShootTime >= shootCooldown)
         {
-            Shoot(shootDirection.normalized);
+            lastShootTime = Time.time;
+            GameObject tear = Instantiate(tearPrefab, transform.position, Quaternion.identity);
+            Rigidbody2D tearRb = tear.GetComponent<Rigidbody2D>();
+            tearRb.velocity = shootDirection.normalized * shootSpeed * fireRateBoost;
+            Destroy(tear, tearLifetime);
         }
     }
 
-    void Shoot(Vector2 shootDirection)
+    float GetAxis(KeyCode negativeKey, KeyCode positiveKey)
     {
-        lastShootTime = Time.time;
-        GameObject tear = Instantiate(tearPrefab, transform.position, Quaternion.identity);
-        Rigidbody2D tearRb = tear.GetComponent<Rigidbody2D>();
-        tearRb.velocity = shootDirection * shootSpeed;
-        Destroy(tear, tearLifetime);
+        float axis = 0;
+
+        if (Input.GetKey(positiveKey))
+        {
+            axis = 1;
+        }
+        else if (Input.GetKey(negativeKey))
+        {
+            axis = -1;
+        }
+
+        return axis;
+    }
+
+    Vector2 GetShootingDirection()
+    {
+        Vector2 shootDirection = GetDirectionForKey(shootLeftKey, Vector2.left);
+        shootDirection += GetDirectionForKey(shootRightKey, Vector2.right);
+        shootDirection += GetDirectionForKey(shootUpKey, Vector2.up);
+        shootDirection += GetDirectionForKey(shootDownKey, Vector2.down);
+        return shootDirection;
+    }
+
+    Vector2 GetDirectionForKey(KeyCode key, Vector2 direction)
+    {
+        if (Input.GetKey(key))
+        {
+            return direction;
+        }
+        return Vector2.zero;
+    }
+
+    // Применение эффектов предметов
+    public void ApplyItemEffect(Item item)
+    {
+        damageBoost += item.DamageBoost;
+        fireRateBoost += item.FireRateBoost;
+        // Другие эффекты предметов
     }
 }
-
-
-
