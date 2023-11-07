@@ -113,4 +113,7 @@ public class PlayerController : MonoBehaviour
         fireRateBoost += item.FireRateBoost;
         // Другие эффекты предметов
     }
+
+ 
+
 }

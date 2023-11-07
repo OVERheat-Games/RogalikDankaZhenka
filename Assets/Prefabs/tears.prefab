@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7945140614873360139}
   - component: {fileID: 2741247389131277782}
   - component: {fileID: 9107310745278544998}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: tears
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 1893320140, guid: 0ff30089cbd21df40910bd1251789762, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
