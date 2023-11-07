@@ -73,42 +73,32 @@ public class ChangeRooms : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Door"))
         {
+            Vector3 newPosition = Vector3.zero;
+
             switch (other.gameObject.name)
             {
                 case "TopDoor":
-                    {
-                        currentY++;
-                        Vector3 newPosition = new Vector3(5, -5, 0);
-                        transform.position = newPosition;
-                        ChangeRoom();
-                        break;
-                    }
+                    currentY++;
+                    newPosition = new Vector3(5, -5, 0);
+                    break;
                 case "BottomDoor":
-                    {
-                        currentY--;
-                        Vector3 newPosition = new Vector3(5, 30, 0);
-                        transform.position = newPosition;
-                        ChangeRoom();
-                        break;
-                    }
+                    currentY--;
+                    newPosition = new Vector3(5, 30, 0);
+                    break;
                 case "LeftDoor":
-                    {
-                        currentX--;
-                        Vector3 newPosition = new Vector3(32, 15, 0);
-                        transform.position = newPosition;
-                        ChangeRoom();
-                        break;
-                    }
+                    currentX--;
+                    newPosition = new Vector3(32, 15, 0);
+                    break;
                 case "RightDoor":
-                    {
-                        currentX++;
-                        Vector3 newPosition = new Vector3(-28, 15, 0);
-                        transform.position = newPosition;
-                        ChangeRoom();
-                        break;
-                    }
+                    currentX++;
+                    newPosition = new Vector3(-28, 15, 0);
+                    break;
             }
+
+            transform.position = newPosition;
+            ChangeRoom();
         }
+        // Другие обработки столкновений
     }
 }
-    
+

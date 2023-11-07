@@ -13,10 +13,7 @@ public class Room
     public bool Bottomdoor = false;
     public bool Leftdoor = false;
     public bool Rightdoor = false;
-    public bool topDoorOpen = true;
-    public bool bottomDoorOpen = true;
-    public bool rightDoorOpen = true;
-    public bool leftDoorOpen = true;
+    
 
 
     public bool Cleared = false;
