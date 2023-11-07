@@ -500,7 +500,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &138807328
 Transform:
   m_ObjectHideFlags: 0
@@ -926,7 +926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f5988da89198184d9897b7b27ca1d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 15
+  moveSpeed: 65
   tearPrefab: {fileID: 3304796125639649175, guid: 07f6294c919643140b20f38458cc8cdc, type: 3}
   shootCooldown: 0.5
   shootSpeed: 10
@@ -1741,7 +1741,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &467928820
 Transform:
   m_ObjectHideFlags: 0
@@ -4776,7 +4776,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1570840804
 Transform:
   m_ObjectHideFlags: 0
@@ -5692,7 +5692,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1744696687
 Transform:
   m_ObjectHideFlags: 0
@@ -6699,9 +6699,9 @@ SceneRoots:
   - {fileID: 1624696473}
   - {fileID: 215884102}
   - {fileID: 1525579964}
+  - {fileID: 143462643}
   - {fileID: 926938549}
   - {fileID: 1362999843}
-  - {fileID: 143462643}
   - {fileID: 1665385266}
   - {fileID: 47641131}
   - {fileID: 2058552528}

@@ -52,15 +52,15 @@ public class ChangeRooms : MonoBehaviour
             {
                 Doors.transform.Find("TopDoor").gameObject.SetActive(!room.Bottomdoor);
             }
-            if (room.position.x == R.position.x && room.position.y == R.position.y - 1)
+            if (room.position.x == R.position.x && room.position.y == R.position.y )
             {
                 Doors.transform.Find("BottomDoor").gameObject.SetActive(!room.Topdoor);
             }
-            if (room.position.x == R.position.x + 1 && room.position.y == R.position.y)
+            if (room.position.x == R.position.x  && room.position.y == R.position.y)
             {
                 Doors.transform.Find("RightDoor").gameObject.SetActive(!room.Leftdoor);
             }
-            if (room.position.x == R.position.x - 1 && room.position.y == R.position.y)
+            if (room.position.x == R.position.x  && room.position.y == R.position.y)
             {
                 Doors.transform.Find("LeftDoor").gameObject.SetActive(!room.Rightdoor);
             }
@@ -79,7 +79,7 @@ public class ChangeRooms : MonoBehaviour
             {
                 case "TopDoor":
                     currentY++;
-                    newPosition = new Vector3(5, -5, 0);
+                    newPosition = new Vector3(6, 5, 0);
                     break;
                 case "BottomDoor":
                     currentY--;
