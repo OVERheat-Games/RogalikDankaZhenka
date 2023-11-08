@@ -66,7 +66,10 @@ public class GenerateLevel : MonoBehaviour
 
         Panel.transform.SetParent(Map.transform, false);
 
-
+        if (R.RoomNumber > 3)
+        {
+            R.RoomNumber = UnityEngine.Random.Range(6, GameObject.Find("Rooms").transform.childCount);
+        }
 
         Level.RoomList.Add(R);
     }
@@ -192,11 +195,11 @@ public class GenerateLevel : MonoBehaviour
                 LeftRoom.RoomNumber = 6;
                 LeftRoom.position = newRoomPosition;
                 // Отладочные логи перед установкой дверей
-                UnityEngine.Debug.Log("Before GenerateAttachedRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
+                //UnityEngine.Debug.Log("Before GenerateAttachedRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
 
 
                 // Отладочные логи перед вызовом NoMoreRooms
-                UnityEngine.Debug.Log("Before NoMoreRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
+               // UnityEngine.Debug.Log("Before NoMoreRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
                 if (NoMoreRooms(LeftRoom) && !itemroomfound && !dont)
                 {
                     itemroomfound = true;
@@ -204,7 +207,7 @@ public class GenerateLevel : MonoBehaviour
                     DrawOnMap(LeftRoom);
                     dont = true;
                     // Отладочные логи после вызова NoMoreRooms
-                    UnityEngine.Debug.Log("After NoMoreRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
+                   // UnityEngine.Debug.Log("After NoMoreRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
                 }
                 if (NoMoreRooms(LeftRoom) && !shopfound && !dont)
                 {
@@ -227,7 +230,7 @@ public class GenerateLevel : MonoBehaviour
                     GenerateAttachedRooms(LeftRoom);
                 }
                 // Отладочные логи после установки дверей
-                UnityEngine.Debug.Log("After GenerateAttachedRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
+               // UnityEngine.Debug.Log("After GenerateAttachedRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
 
             }
 
@@ -438,8 +441,8 @@ public class GenerateLevel : MonoBehaviour
             {
                 Start(); // Повторяем генерацию
             }
-        
-    }
+
+        }
         else
         {
             Player.CurrentRoom = startRoom;
@@ -454,6 +457,89 @@ public class GenerateLevel : MonoBehaviour
 
     }
 
+    public void Redraw()
+    {
 
+        float roomImageSize = Level.MapSize / 10;
+
+        GameObject Map = GameObject.Find("Map");
+
+        foreach (Room R in Level.RoomList)
+        {
+            GameObject Panel = new GameObject("MapTile");
+            Panel.AddComponent<CanvasRenderer>();
+            UnityEngine.UI.Image i = Panel.AddComponent<UnityEngine.UI.Image>();
+
+            i.sprite = R.RoomImage.sprite;
+
+            R.RoomImage = i;
+
+            Panel.GetComponent<RectTransform>().sizeDelta = new Vector2(roomImageSize, roomImageSize);
+            Panel.transform.localPosition = new Vector3(roomImageSize * R.position.x, roomImageSize * R.position.y, 0);
+
+            Panel.transform.SetParent(Map.transform, false);
+
+        }
+
+
+    }
+
+    Vector2 startMousePosition = Vector2.zero;
+    Vector2 oldmousepos = Vector2.zero;
+    public Vector2 mousedif = Vector2.zero;
+
+    public float currentScale = 0f;
+
+    private void Update()
+    {
+        {
+            if (Input.GetMouseButton(2))
+            {
+                Vector2 newmousepos = Input.mousePosition;
+                if (oldmousepos != Vector2.zero)
+                {
+                    mousedif = newmousepos - oldmousepos;
+                    startMousePosition = new Vector2(startMousePosition.x + mousedif.x, startMousePosition.y + mousedif.y);
+                    GameObject MapCanvas = GameObject.Find("MapCanvas");
+                    GameObject Map = MapCanvas.transform.Find("Map").gameObject;
+                    foreach (Transform child in Map.transform)
+                    {
+                        child.transform.position = new Vector3(child.transform.position.x + mousedif.x, child.transform.position.y + mousedif.y, 0);
+
+                    }
+
+                }
+                oldmousepos = newmousepos;
+            }
+            else
+            {
+                oldmousepos = Vector2.zero;
+            }
+
+        }
+
+        //Scrollwheel resize
+        {
+            currentScale = Level.MapSize; //200
+
+            Vector2 mousescroll = Input.mouseScrollDelta;
+            Level.MapSize += (mousescroll.y * 3f);
+
+            if (Level.MapSize > 1000f) Level.MapSize = 1000f;
+            if (Level.MapSize < 1f) Level.MapSize = 1f;
+
+            if (Level.MapSize != currentScale)
+            {
+
+                GameObject Map = GameObject.Find("Map");
+                foreach (Transform child in Map.transform)
+                {
+                    GameObject.Destroy(child.gameObject);
+                }
+
+                Redraw();
+            }
+        }
+    }
 
 }

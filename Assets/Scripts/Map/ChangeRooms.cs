@@ -8,6 +8,10 @@ using UnityEngine;
 
 public class ChangeRooms : MonoBehaviour
 {
+    [SerializeField] private GameObject Walls;
+    [SerializeField] private GameObject Plane;
+    [SerializeField] private GameObject Rooms;
+
     int currentX = 0;
     int currentY = 0;
 
@@ -20,7 +24,7 @@ public class ChangeRooms : MonoBehaviour
 
     public void ChangeRoom()
     {
-        UnityEngine.Debug.Log("Before ChangeRoom: currentX = " + currentX + ", currentY = " + currentY);
+        // UnityEngine.Debug.Log("Before ChangeRoom: currentX = " + currentX + ", currentY = " + currentY);
         foreach (Room R in Level.RoomList)
         {
             if (currentX == R.position.x && currentY == R.position.y)
@@ -31,11 +35,20 @@ public class ChangeRooms : MonoBehaviour
                 previousSprite = Player.CurrentRoom.RoomImage.sprite;
                 Player.CurrentRoom.RoomImage.sprite = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Images/MapImages/Location.jpg", typeof(Sprite));
 
+                
+                foreach (Transform child in GameObject.Find("Rooms").transform)
+                {
+                    child.gameObject.SetActive(false);
+                }
+                
+
+
+                GameObject.Find("Rooms").transform.Find(R.RoomNumber.ToString()).gameObject.SetActive(true);
                 // Здесь вы можете также обновить состояние дверей в текущей комнате, если требуется.
             }
             continue;
         }
-        UnityEngine.Debug.Log("After ChangeRoom: currentX = " + currentX + ", currentY = " + currentY);
+        // UnityEngine.Debug.Log("After ChangeRoom: currentX = " + currentX + ", currentY = " + currentY);
     }
 
     public static void DrawDoors(Room R)
