@@ -27,7 +27,7 @@ public static class Level
 {
     public static float RoomGenerationChance = .5f;
     public static float MapSize = 200f;
-    public static float MaxRooms = 3;
+    public static float MaxRooms = 2;
     public static List<Room> RoomList = new List<Room>();
 
 }
