@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using UnityEditor;
 using UnityEngine;
@@ -8,6 +9,7 @@ using UnityEngine.UIElements;
 
 public class GenerateLevel : MonoBehaviour
 {
+    List<Room> generatedRooms = new List<Room>();
     bool itemroomfound = false;
     bool shopfound = false;
     bool bossroomfound = false;
@@ -189,16 +191,22 @@ public class GenerateLevel : MonoBehaviour
                 LeftRoom.Rightdoor = UnityEngine.Random.value > Level.RoomGenerationChance;
                 LeftRoom.RoomNumber = 6;
                 LeftRoom.position = newRoomPosition;
+                // Отладочные логи перед установкой дверей
+                UnityEngine.Debug.Log("Before GenerateAttachedRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
 
-                if(NoMoreRooms(LeftRoom) && !itemroomfound && !dont)
+
+                // Отладочные логи перед вызовом NoMoreRooms
+                UnityEngine.Debug.Log("Before NoMoreRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
+                if (NoMoreRooms(LeftRoom) && !itemroomfound && !dont)
                 {
-                    itemroomfound= true;
+                    itemroomfound = true;
                     LeftRoom.RoomNumber = 3;
                     DrawOnMap(LeftRoom);
                     dont = true;
-
+                    // Отладочные логи после вызова NoMoreRooms
+                    UnityEngine.Debug.Log("After NoMoreRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
                 }
-                if(NoMoreRooms(LeftRoom) && !shopfound && !dont)
+                if (NoMoreRooms(LeftRoom) && !shopfound && !dont)
                 {
                     shopfound = true;
                     LeftRoom.RoomNumber = 2;
@@ -212,11 +220,14 @@ public class GenerateLevel : MonoBehaviour
                     DrawOnMap(LeftRoom);
                     dont = true;
                 }
-                else if(!dont)
+                else if (!dont)
                 {
                     DrawOnMap(LeftRoom);
+                    generatedRooms.Add(LeftRoom); // Добавляем комнату в список сгенерированных комнат
                     GenerateAttachedRooms(LeftRoom);
                 }
+                // Отладочные логи после установки дверей
+                UnityEngine.Debug.Log("After GenerateAttachedRooms: Leftdoor = " + LeftRoom.Leftdoor + ", Topdoor = " + LeftRoom.Topdoor + ", Bottomdoor = " + LeftRoom.Bottomdoor + ", Rightdoor = " + LeftRoom.Rightdoor);
 
             }
 
@@ -242,7 +253,7 @@ public class GenerateLevel : MonoBehaviour
                 RightRoom.Topdoor = UnityEngine.Random.value > Level.RoomGenerationChance;
                 RightRoom.Rightdoor = UnityEngine.Random.value > Level.RoomGenerationChance;
                 RightRoom.Bottomdoor = UnityEngine.Random.value > Level.RoomGenerationChance;
-                RightRoom.Leftdoor  = UnityEngine.Random.value > Level.RoomGenerationChance;
+                RightRoom.Leftdoor = UnityEngine.Random.value > Level.RoomGenerationChance;
                 RightRoom.RoomNumber = 6;
                 RightRoom.position = newRoomPosition;
 
@@ -331,23 +342,23 @@ public class GenerateLevel : MonoBehaviour
 
             }
         }
-            if (R.Bottomdoor)
+        if (R.Bottomdoor)
+        {
+            bool alreadyexists = false;
+
+            Vector2 newRoomPosition = new Vector2(R.position.x, R.position.y - 1);
+
+            foreach (Room existingroom in Level.RoomList)
             {
-                bool alreadyexists = false;
-
-                Vector2 newRoomPosition = new Vector2(R.position.x, R.position.y - 1);
-
-                foreach (Room existingroom in Level.RoomList)
+                if (existingroom.position.x == newRoomPosition.x && existingroom.position.y == newRoomPosition.y)
                 {
-                    if (existingroom.position.x == newRoomPosition.x && existingroom.position.y == newRoomPosition.y)
-                    {
-                        alreadyexists = true;
-                    }
+                    alreadyexists = true;
                 }
+            }
 
-                if (!alreadyexists && R.position.y > -Level.MaxRooms && (!CheckIfRoomsAreTouching(newRoomPosition, "down")))
-                {
-                    Room BottomRoom = new Room();
+            if (!alreadyexists && R.position.y > -Level.MaxRooms && (!CheckIfRoomsAreTouching(newRoomPosition, "down")))
+            {
+                Room BottomRoom = new Room();
                 BottomRoom.Topdoor = UnityEngine.Random.value > Level.RoomGenerationChance;
                 BottomRoom.Rightdoor = UnityEngine.Random.value > Level.RoomGenerationChance;
                 BottomRoom.Leftdoor = UnityEngine.Random.value > Level.RoomGenerationChance;
@@ -355,37 +366,37 @@ public class GenerateLevel : MonoBehaviour
                 BottomRoom.RoomNumber = 6;
                 BottomRoom.position = newRoomPosition;
 
-                    if (NoMoreRooms(BottomRoom) && !itemroomfound && !dont)
-                    {
-                        itemroomfound = true;
+                if (NoMoreRooms(BottomRoom) && !itemroomfound && !dont)
+                {
+                    itemroomfound = true;
                     BottomRoom.RoomNumber = 3;
-                        DrawOnMap(BottomRoom);
-                        dont = true;
-
-                    }
-                    if (NoMoreRooms(BottomRoom) && !shopfound && !dont)
-                    {
-                        shopfound = true;
-                    BottomRoom.RoomNumber = 2;
-                        DrawOnMap(BottomRoom);
-                        dont = true;
-                    }
-                    if (NoMoreRooms(BottomRoom) && !bossroomfound && !dont && R.RoomNumber != 0)
-                    {
-                        bossroomfound = true;
-                    BottomRoom.RoomNumber = 1;
-                        DrawOnMap(BottomRoom);
-                        dont = true;
-                    }
-                    else if (!dont)
-                    {
-                        DrawOnMap(BottomRoom);
-                        GenerateAttachedRooms(BottomRoom);
-                    }
+                    DrawOnMap(BottomRoom);
+                    dont = true;
 
                 }
+                if (NoMoreRooms(BottomRoom) && !shopfound && !dont)
+                {
+                    shopfound = true;
+                    BottomRoom.RoomNumber = 2;
+                    DrawOnMap(BottomRoom);
+                    dont = true;
+                }
+                if (NoMoreRooms(BottomRoom) && !bossroomfound && !dont && R.RoomNumber != 0)
+                {
+                    bossroomfound = true;
+                    BottomRoom.RoomNumber = 1;
+                    DrawOnMap(BottomRoom);
+                    dont = true;
+                }
+                else if (!dont)
+                {
+                    DrawOnMap(BottomRoom);
+                    GenerateAttachedRooms(BottomRoom);
+                }
+
+            }
         }
-        
+
     }
 
 
@@ -410,6 +421,8 @@ public class GenerateLevel : MonoBehaviour
             itemroomfound = false;
             shopfound = false;
             bossroomfound = false;
+
+            generatedRooms.Clear(); // Очищаем список сгенерированных комнат
 
             Level.RoomList.Clear();
 
@@ -438,6 +451,3 @@ public class GenerateLevel : MonoBehaviour
 
 
 }
-
-
-

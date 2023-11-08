@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
 
 public class ChangeRooms : MonoBehaviour
 {
-
-
-
     int currentX = 0;
     int currentY = 0;
 
@@ -22,6 +20,7 @@ public class ChangeRooms : MonoBehaviour
 
     public void ChangeRoom()
     {
+        UnityEngine.Debug.Log("Before ChangeRoom: currentX = " + currentX + ", currentY = " + currentY);
         foreach (Room R in Level.RoomList)
         {
             if (currentX == R.position.x && currentY == R.position.y)
@@ -35,6 +34,7 @@ public class ChangeRooms : MonoBehaviour
                 // Здесь вы можете также обновить состояние дверей в текущей комнате, если требуется.
             }
         }
+        UnityEngine.Debug.Log("After ChangeRoom: currentX = " + currentX + ", currentY = " + currentY);
     }
 
     public static void DrawDoors(Room R)
@@ -46,28 +46,39 @@ public class ChangeRooms : MonoBehaviour
             Doors.transform.GetChild(i).gameObject.SetActive(true);
         }
 
+        // Добавим флаги для каждой двери
+        bool topDoor = false;
+        bool bottomDoor = false;
+        bool rightDoor = false;
+        bool leftDoor = false;
+
+        // Пройдемся по всем соседним комнатам
         foreach (Room room in Level.RoomList)
         {
             if (room.position.x == R.position.x && room.position.y == R.position.y + 1)
             {
-                Doors.transform.Find("TopDoor").gameObject.SetActive(!room.Bottomdoor);
+                topDoor = !room.Bottomdoor;
             }
-            if (room.position.x == R.position.x && room.position.y == R.position.y )
+            if (room.position.x == R.position.x && room.position.y == R.position.y - 1)
             {
-                Doors.transform.Find("BottomDoor").gameObject.SetActive(!room.Topdoor);
+                bottomDoor = !room.Topdoor;
             }
-            if (room.position.x == R.position.x  && room.position.y == R.position.y)
+            if (room.position.x == R.position.x + 1 && room.position.y == R.position.y)
             {
-                Doors.transform.Find("RightDoor").gameObject.SetActive(!room.Leftdoor);
+                rightDoor = !room.Leftdoor;
             }
-            if (room.position.x == R.position.x  && room.position.y == R.position.y)
+            if (room.position.x == R.position.x - 1 && room.position.y == R.position.y)
             {
-                Doors.transform.Find("LeftDoor").gameObject.SetActive(!room.Rightdoor);
+                leftDoor = !room.Rightdoor;
             }
         }
+
+        // Устанавливаем активность дверей на основе флагов
+        Doors.transform.Find("TopDoor").gameObject.SetActive(topDoor);
+        Doors.transform.Find("BottomDoor").gameObject.SetActive(bottomDoor);
+        Doors.transform.Find("RightDoor").gameObject.SetActive(rightDoor);
+        Doors.transform.Find("LeftDoor").gameObject.SetActive(leftDoor);
     }
-
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -101,4 +112,3 @@ public class ChangeRooms : MonoBehaviour
         // Другие обработки столкновений
     }
 }
-
