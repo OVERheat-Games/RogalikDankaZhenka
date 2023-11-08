@@ -100,7 +100,7 @@ public class ChangeRooms : MonoBehaviour
             {
                 case "TopDoor":
                     currentY++;
-                    newPosition = new Vector3(6, 5, 0);
+                    newPosition = new Vector3(6, -4, 0);
                     break;
                 case "BottomDoor":
                     currentY--;
