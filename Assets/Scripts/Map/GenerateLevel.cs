@@ -403,6 +403,7 @@ public class GenerateLevel : MonoBehaviour
     private void Start()
     {
         int maxtries = 0;
+        int maxMaxTries = 1000;
 
         Room startRoom = new Room();
         startRoom.Topdoor = true;
@@ -432,8 +433,13 @@ public class GenerateLevel : MonoBehaviour
                 GameObject.Destroy(child.gameObject);
             }
 
-            Start();
-        }
+            maxtries += 1;
+            if (maxtries < maxMaxTries)
+            {
+                Start(); // Повторяем генерацию
+            }
+        
+    }
         else
         {
             Player.CurrentRoom = startRoom;

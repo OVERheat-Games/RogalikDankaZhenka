@@ -33,6 +33,7 @@ public class ChangeRooms : MonoBehaviour
 
                 // Здесь вы можете также обновить состояние дверей в текущей комнате, если требуется.
             }
+            continue;
         }
         UnityEngine.Debug.Log("After ChangeRoom: currentX = " + currentX + ", currentY = " + currentY);
     }
@@ -43,7 +44,7 @@ public class ChangeRooms : MonoBehaviour
 
         for (int i = 0; i < Doors.transform.childCount; i++)
         {
-            Doors.transform.GetChild(i).gameObject.SetActive(true);
+            Doors.transform.GetChild(i).gameObject.SetActive(false);
         }
 
         // Добавим флаги для каждой двери
@@ -57,27 +58,23 @@ public class ChangeRooms : MonoBehaviour
         {
             if (room.position.x == R.position.x && room.position.y == R.position.y + 1)
             {
-                topDoor = !room.Bottomdoor;
+                Doors.transform.Find("TopDoor").gameObject.SetActive(true);
             }
             if (room.position.x == R.position.x && room.position.y == R.position.y - 1)
             {
-                bottomDoor = !room.Topdoor;
-            }
-            if (room.position.x == R.position.x + 1 && room.position.y == R.position.y)
-            {
-                rightDoor = !room.Leftdoor;
+                Doors.transform.Find("BottomDoor").gameObject.SetActive(true);
             }
             if (room.position.x == R.position.x - 1 && room.position.y == R.position.y)
             {
-                leftDoor = !room.Rightdoor;
+                Doors.transform.Find("LeftDoor").gameObject.SetActive(true);
+            }
+            if (room.position.x == R.position.x + 1 && room.position.y == R.position.y)
+            {
+                Doors.transform.Find("RightDoor").gameObject.SetActive(true);
             }
         }
 
-        // Устанавливаем активность дверей на основе флагов
-        Doors.transform.Find("TopDoor").gameObject.SetActive(topDoor);
-        Doors.transform.Find("BottomDoor").gameObject.SetActive(bottomDoor);
-        Doors.transform.Find("RightDoor").gameObject.SetActive(rightDoor);
-        Doors.transform.Find("LeftDoor").gameObject.SetActive(leftDoor);
+       
     }
 
     private void OnTriggerEnter2D(Collider2D other)
