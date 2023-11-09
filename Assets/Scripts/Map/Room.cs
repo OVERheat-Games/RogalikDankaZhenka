@@ -30,4 +30,6 @@ public static class Level
     public static float MaxRooms = 2;
     public static List<Room> RoomList = new List<Room>();
 
+    public static float MaximumVelocity = 20f;
+
 }
