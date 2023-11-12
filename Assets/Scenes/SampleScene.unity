@@ -1756,11 +1756,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 215884102}
-  - component: {fileID: 215884101}
   - component: {fileID: 215884105}
   - component: {fileID: 215884106}
   - component: {fileID: 215884108}
   - component: {fileID: 215884107}
+  - component: {fileID: 215884109}
+  - component: {fileID: 215884110}
+  - component: {fileID: 215884111}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1768,31 +1770,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &215884101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 215884100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f5988da89198184d9897b7b27ca1d1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 65
-  tearPrefab: {fileID: 3304796125639649175, guid: 07f6294c919643140b20f38458cc8cdc, type: 3}
-  shootCooldown: 0.5
-  shootSpeed: 10
-  tearLifetime: 2
-  moveUpKey: 119
-  moveDownKey: 115
-  moveLeftKey: 97
-  moveRightKey: 100
-  shootLeftKey: 276
-  shootRightKey: 275
-  shootUpKey: 273
-  shootDownKey: 274
 --- !u!4 &215884102
 Transform:
   m_ObjectHideFlags: 0
@@ -1918,6 +1895,58 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 8.7319765, y: 10.128028}
   m_EdgeRadius: 0
+--- !u!114 &215884109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215884100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6694cae0c9d0d5458b675bd274597d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 60
+  moveUpKey: 119
+  moveDownKey: 115
+  moveLeftKey: 97
+  moveRightKey: 100
+--- !u!114 &215884110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215884100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0951d93969f8332418fecdd126a8dd36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tearPrefab: {fileID: 3304796125639649175, guid: 07f6294c919643140b20f38458cc8cdc, type: 3}
+  shootCooldown: 0.5
+  shootSpeed: 10
+  tearLifetime: 2
+  shootLeftKey: 276
+  shootRightKey: 275
+  shootUpKey: 273
+  shootDownKey: 274
+--- !u!114 &215884111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215884100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 394716d4b4613d848a3bef295cec89bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Position: {fileID: 0}
+  maincamera: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!1 &225583003
 GameObject:
   m_ObjectHideFlags: 0
@@ -4720,7 +4749,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &691140133
 SpriteRenderer:
   m_ObjectHideFlags: 0
