@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement; // Для работы с сценами
+using TMPro;
+using System.Diagnostics;
+
 
 public class PauseMenu : MonoBehaviour
 {
@@ -9,9 +12,11 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     public Button continueButton;
     public Button restartButton;
+    public TextMeshProUGUI continueButtonText;
+    public TextMeshProUGUI restartButtonText;
 
     private bool isPaused = false;
-    private Button selectedButton; // Ссылка на текущую выбранную кнопку
+    private Button selectedButton;
 
     void Start()
     {
@@ -23,11 +28,9 @@ public class PauseMenu : MonoBehaviour
 
         videoPlayer.Pause();
 
-        // Добавляем слушателей для кнопок
         continueButton.onClick.AddListener(ContinueButton);
         restartButton.onClick.AddListener(RestartButton);
 
-        // Начинаем с выбранной кнопки "ContinueButton"
         selectedButton = continueButton;
         SelectButton(selectedButton);
     }
@@ -39,7 +42,6 @@ public class PauseMenu : MonoBehaviour
             TogglePause();
         }
 
-        // Обработка клавиш вверх и вниз
         if (isPaused)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -52,7 +54,6 @@ public class PauseMenu : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
-                // Вызываем метод для выбранной кнопки при нажатии Enter
                 selectedButton.onClick.Invoke();
             }
         }
@@ -89,16 +90,18 @@ public class PauseMenu : MonoBehaviour
             pauseMenuUI.SetActive(false);
             videoPlayer.Pause();
             UnityEngine.Debug.Log("Продолжение");
+
+            // Выключаем кнопки после их использования
+            continueButton.gameObject.SetActive(false);
+            restartButton.gameObject.SetActive(false);
         }
     }
 
-    // Метод для кнопки "Continue"
     public void ContinueButton()
     {
         Time.timeScale = 1f;
         pauseMenuUI.SetActive(false);
 
-        // Проверяем, включен ли VideoPlayer, прежде чем вызывать Pause()
         if (videoPlayer.isActiveAndEnabled)
         {
             videoPlayer.Pause();
@@ -111,21 +114,20 @@ public class PauseMenu : MonoBehaviour
         isPaused = false;
         UnityEngine.Debug.Log("Продолжение");
 
-        // Выключаем кнопки после их использования
         continueButton.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
     }
 
-    // Метод для кнопки "Restart"
     public void RestartButton()
     {
-        // Перезагрузка текущей сцены
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
         isPaused = false;
+        continueButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
     }
 
-    // Метод для изменения выбранной кнопки
+
     private void ChangeSelectedButton(Button newButton)
     {
         DeselectButton(selectedButton);
@@ -133,19 +135,51 @@ public class PauseMenu : MonoBehaviour
         SelectButton(selectedButton);
     }
 
-    // Метод для выделения кнопки (например, изменение цвета)
     private void SelectButton(Button button)
     {
         ColorBlock colors = button.colors;
-        colors.normalColor = Color.yellow; // Меняем цвет при выделении
+        colors.normalColor = Color.yellow;
         button.colors = colors;
+
+        TextMeshProUGUI buttonText = GetButtonText(button);
+        if (buttonText != null)
+        {
+            buttonText.color = Color.yellow;
+        }
     }
 
-    // Метод для снятия выделения с кнопки
     private void DeselectButton(Button button)
     {
         ColorBlock colors = button.colors;
-        colors.normalColor = Color.white; // Возвращаем обычный цвет
+        colors.normalColor = Color.white;
         button.colors = colors;
+
+        TextMeshProUGUI buttonText = GetButtonText(button);
+        if (buttonText != null)
+        {
+            buttonText.color = Color.white;
+        }
+    }
+
+    private TextMeshProUGUI GetButtonText(Button button)
+    {
+        if (button == continueButton)
+        {
+            return continueButtonText;
+        }
+        else if (button == restartButton)
+        {
+            return restartButtonText;
+        }
+
+        return null;
+    }
+
+    private void SetButtonColor(TextMeshProUGUI buttonText, Color color)
+    {
+        if (buttonText != null)
+        {
+            buttonText.color = color;
+        }
     }
 }
