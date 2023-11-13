@@ -1,22 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using UnityEngine.SceneManagement; // Для работы с сценами
+using UnityEngine.SceneManagement;
 using TMPro;
-using System.Diagnostics;
-
 
 public class PauseMenu : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
     public GameObject pauseMenuUI;
+    public GameObject spritePlay; // Обновленное название переменной
     public Button continueButton;
     public Button restartButton;
     public TextMeshProUGUI continueButtonText;
     public TextMeshProUGUI restartButtonText;
+    public TextMeshProUGUI gameTimeText;
 
     private bool isPaused = false;
     private Button selectedButton;
+    private float timer = 0f;
+
+    public bool IsPaused
+    {
+        get { return isPaused; }
+    }
 
     void Start()
     {
@@ -37,6 +43,12 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        if (!isPaused)
+        {
+            timer += Time.deltaTime;
+            UpdateGameTimeUI();
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
@@ -59,6 +71,21 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    void UpdateGameTimeUI()
+    {
+        if (gameTimeText != null)
+        {
+            gameTimeText.text = FormatTime(timer);
+        }
+    }
+
+    string FormatTime(float timeInSeconds)
+    {
+        int minutes = Mathf.FloorToInt(timeInSeconds / 60);
+        int seconds = Mathf.FloorToInt(timeInSeconds % 60);
+        return string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
     void TogglePause()
     {
         isPaused = !isPaused;
@@ -76,11 +103,12 @@ public class PauseMenu : MonoBehaviour
             videoPlayer.Play();
             UnityEngine.Debug.Log("Пауза");
 
-            // Активируем кнопки перед их использованием
             continueButton.gameObject.SetActive(true);
             restartButton.gameObject.SetActive(true);
 
-            // Начинаем с выбранной кнопки "ContinueButton"
+            // Включаем объект при снятии паузы
+            spritePlay.SetActive(false);
+
             selectedButton = continueButton;
             SelectButton(selectedButton);
         }
@@ -91,13 +119,15 @@ public class PauseMenu : MonoBehaviour
             videoPlayer.Pause();
             UnityEngine.Debug.Log("Продолжение");
 
-            // Выключаем кнопки после их использования
             continueButton.gameObject.SetActive(false);
             restartButton.gameObject.SetActive(false);
+
+            // Отключаем объект при установке паузы
+            spritePlay.SetActive(true);
         }
     }
 
-    public void ContinueButton()
+    void ContinueButton()
     {
         Time.timeScale = 1f;
         pauseMenuUI.SetActive(false);
@@ -116,17 +146,22 @@ public class PauseMenu : MonoBehaviour
 
         continueButton.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
+
+        // Отключаем объект при установке паузы
+        spritePlay.SetActive(true);
     }
 
-    public void RestartButton()
+    void RestartButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
         isPaused = false;
         continueButton.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
-    }
 
+        // Отключаем объект при установке паузы
+        spritePlay.SetActive(true);
+    }
 
     private void ChangeSelectedButton(Button newButton)
     {
@@ -138,19 +173,6 @@ public class PauseMenu : MonoBehaviour
     private void SelectButton(Button button)
     {
         ColorBlock colors = button.colors;
-        colors.normalColor = Color.yellow;
-        button.colors = colors;
-
-        TextMeshProUGUI buttonText = GetButtonText(button);
-        if (buttonText != null)
-        {
-            buttonText.color = Color.yellow;
-        }
-    }
-
-    private void DeselectButton(Button button)
-    {
-        ColorBlock colors = button.colors;
         colors.normalColor = Color.white;
         button.colors = colors;
 
@@ -158,6 +180,19 @@ public class PauseMenu : MonoBehaviour
         if (buttonText != null)
         {
             buttonText.color = Color.white;
+        }
+    }
+
+    private void DeselectButton(Button button)
+    {
+        ColorBlock colors = button.colors;
+        colors.normalColor = Color.gray;
+        button.colors = colors;
+
+        TextMeshProUGUI buttonText = GetButtonText(button);
+        if (buttonText != null)
+        {
+            buttonText.color = Color.gray;
         }
     }
 
