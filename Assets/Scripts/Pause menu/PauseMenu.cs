@@ -3,14 +3,24 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Collections;
 
 public class PauseMenu : MonoBehaviour
 {
+    public MusicGame musicGame;
+    public AudioSource EndPause;
+    public AudioSource startPause;
+    public AudioSource soundPause;
+
     public VideoPlayer videoPlayer;
+
+    public GameObject Hud;
     public GameObject pauseMenuUI;
-    public GameObject spritePlay; // Обновленное название переменной
+    public GameObject spritePlay;
+
     public Button continueButton;
     public Button restartButton;
+
     public TextMeshProUGUI continueButtonText;
     public TextMeshProUGUI restartButtonText;
     public TextMeshProUGUI gameTimeText;
@@ -18,6 +28,9 @@ public class PauseMenu : MonoBehaviour
     private bool isPaused = false;
     private Button selectedButton;
     private float timer = 0f;
+    private bool endPauseAudioPlayed = false;
+
+    private Restart_Button restartButtonScript;
 
     public bool IsPaused
     {
@@ -26,13 +39,17 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
-        if (videoPlayer == null)
+        if (videoPlayer != null)
+        {
+            videoPlayer.Pause();
+        }
+    else
         {
             UnityEngine.Debug.LogError("VideoPlayer is not assigned!");
-            return;
         }
 
-        videoPlayer.Pause();
+
+        restartButtonScript = GetComponentInChildren<Restart_Button>();
 
         continueButton.onClick.AddListener(ContinueButton);
         restartButton.onClick.AddListener(RestartButton);
@@ -98,7 +115,11 @@ public class PauseMenu : MonoBehaviour
 
         if (isPaused)
         {
+            musicGame.PauseAudio();
+            startPause.Play();
+            soundPause.Play();
             Time.timeScale = 0f;
+            Hud.SetActive(false);
             pauseMenuUI.SetActive(true);
             videoPlayer.Play();
             UnityEngine.Debug.Log("Пауза");
@@ -111,26 +132,39 @@ public class PauseMenu : MonoBehaviour
 
             selectedButton = continueButton;
             SelectButton(selectedButton);
+
+            // Сбрасываем флаг, когда входим в паузу
+            endPauseAudioPlayed = false;
         }
         else
         {
+            if (!endPauseAudioPlayed)
+            {
+                EndPause.Play();
+                StartCoroutine(DisableEndPauseAudio(EndPause.clip.length));
+                endPauseAudioPlayed = true;
+            }
+
+            musicGame.PlayAudio();
             Time.timeScale = 1f;
             pauseMenuUI.SetActive(false);
             videoPlayer.Pause();
+            Hud.SetActive(true);
             UnityEngine.Debug.Log("Продолжение");
 
             continueButton.gameObject.SetActive(false);
             restartButton.gameObject.SetActive(false);
 
-            // Отключаем объект при установке паузы
             spritePlay.SetActive(true);
         }
     }
 
     void ContinueButton()
     {
+        EndPause.Play();
         Time.timeScale = 1f;
         pauseMenuUI.SetActive(false);
+        musicGame.PlayAudio();
 
         if (videoPlayer.isActiveAndEnabled)
         {
@@ -147,20 +181,24 @@ public class PauseMenu : MonoBehaviour
         continueButton.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
 
-        // Отключаем объект при установке паузы
         spritePlay.SetActive(true);
     }
 
     void RestartButton()
     {
+        Invoke("PlayRestartAudio", 0.1f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
         isPaused = false;
         continueButton.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
 
-        // Отключаем объект при установке паузы
         spritePlay.SetActive(true);
+
+        if (restartButtonScript != null)
+        {
+            restartButtonScript.PlayAudio();
+        }
     }
 
     private void ChangeSelectedButton(Button newButton)
@@ -215,6 +253,15 @@ public class PauseMenu : MonoBehaviour
         if (buttonText != null)
         {
             buttonText.color = color;
+        }
+    }
+
+    private IEnumerator DisableEndPauseAudio(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (EndPause != null && EndPause.isPlaying)
+        {
+            EndPause.Stop();
         }
     }
 }
