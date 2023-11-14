@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
 
     private float lastShootTime;
     private Rigidbody2D rb;
-    private Animator animator;
     private PauseMenu pauseMenu;
 
     // Клавиши управления
@@ -38,7 +37,6 @@ public class PlayerController : MonoBehaviour
     {
         pauseMenu = FindObjectOfType<PauseMenu>();
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -54,10 +52,6 @@ public class PlayerController : MonoBehaviour
 
         Vector2 moveDirection = new Vector2(moveX, moveY).normalized;
         rb.velocity = moveDirection * moveSpeed;
-
-        // Обновление анимаций
-        animator.SetFloat("MoveX", moveDirection.x);
-        animator.SetFloat("MoveY", moveDirection.y);
     }
 
     void Shoot()

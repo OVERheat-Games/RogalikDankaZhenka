@@ -7,6 +7,8 @@ using System.Collections;
 
 public class PauseMenu : MonoBehaviour
 {
+    
+    [SerializeField]private AudioSource restartButtonSound;
     public MusicGame musicGame;
     public AudioSource EndPause;
     public AudioSource startPause;
@@ -39,6 +41,9 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
+        restartButtonScript = GetComponentInChildren<Restart_Button>();
+        restartButtonSound = restartButtonScript.GetComponent<AudioSource>();
+         
         if (videoPlayer != null)
         {
             videoPlayer.Pause();
@@ -195,9 +200,19 @@ public class PauseMenu : MonoBehaviour
 
         spritePlay.SetActive(true);
 
+        if (restartButtonSound != null)
+        {
+            restartButtonSound.Play();
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("restartButtonSound is null!");
+        }
+
+
         if (restartButtonScript != null)
         {
-            restartButtonScript.PlayAudio();
+            restartButtonSound.Play();
         }
     }
 

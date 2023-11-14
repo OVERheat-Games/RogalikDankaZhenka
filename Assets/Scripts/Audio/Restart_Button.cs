@@ -17,9 +17,11 @@ public class Restart_Button : MonoBehaviour
 
     public void PlayAudio()
     {
-        if (restartButtonSound != null && !restartButtonSound.isPlaying)
+        if (restartButtonSound != null)
         {
             restartButtonSound.Play();
+        
+            UnityEngine.Debug.LogError("Рестарт");
         }
     }
 }
