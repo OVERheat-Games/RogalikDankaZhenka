@@ -14,8 +14,17 @@ public class PlayerController : MonoBehaviour
     private float tearLifetime = 2.0f;
 
     private float lastShootTime;
+
     private Rigidbody2D rb;
+
     private PauseMenu pauseMenu;
+
+    private Animator headAnimator;
+    private Animator bodyAnimator;
+    private Transform headTransform;
+
+    private bool isMovingHorizontal;
+    private bool isMovingVertical;
 
     // Клавиши управления
     public KeyCode moveUpKey = KeyCode.W;
@@ -37,6 +46,11 @@ public class PlayerController : MonoBehaviour
     {
         pauseMenu = FindObjectOfType<PauseMenu>();
         rb = GetComponent<Rigidbody2D>();
+
+        headAnimator = transform.Find("Head").GetComponent<Animator>();
+        headTransform = transform.Find("Head");
+
+        bodyAnimator = transform.Find("Body").GetComponent<Animator>();    
     }
 
     void Update()
@@ -52,8 +66,32 @@ public class PlayerController : MonoBehaviour
 
         Vector2 moveDirection = new Vector2(moveX, moveY).normalized;
         rb.velocity = moveDirection * moveSpeed;
-    }
 
+        // Устанавливаем параметры анимации для головы
+        headAnimator.SetBool("IsMovingHorizontal", moveX != 0);
+        headAnimator.SetBool("IsMovingVertical", moveY != 0);
+
+        // Определяем направление взгляда и устанавливаем параметр анимации
+        if (moveX > 0)
+        {
+            // Вправо
+            headAnimator.SetFloat("LookDirection", 1f);
+        }
+        else if (moveX < 0)
+        {
+            // Влево
+            headAnimator.SetFloat("LookDirection", -1f);
+        }
+        else
+        {
+            // Стоим на месте, не двигаемся по горизонтали
+            headAnimator.SetFloat("LookDirection", 0f);
+        }
+
+        // Устанавливаем параметры анимации для тела
+        bodyAnimator.SetBool("IsMovingHorizontal", moveX != 0 || moveY != 0);
+        bodyAnimator.SetBool("IsMovingVertical", moveY != 0);
+    }
     void Shoot()
     {
         if (pauseMenu != null && pauseMenu.IsPaused)
