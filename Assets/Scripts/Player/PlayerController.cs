@@ -12,6 +12,10 @@ public class PlayerController : MonoBehaviour
     private float shootSpeed = 10.0f;
     [SerializeField]
     private float tearLifetime = 2.0f;
+    [SerializeField]
+    private float verticalLookDirection = 0.0f;
+    [SerializeField]
+    private float lookDirection = 0.0f;
 
     private float lastShootTime;
 
@@ -68,16 +72,16 @@ public class PlayerController : MonoBehaviour
         rb.velocity = moveDirection * moveSpeed;
 
         // Устанавливаем параметры анимации для головы
-        headAnimator.SetBool("IsMovingHorizontal", moveX != 0);
-        headAnimator.SetBool("IsMovingVertical", moveY != 0);
+        headAnimator.SetBool("IsMovingHorizontal", Mathf.Abs(moveX) > 0);
+        headAnimator.SetBool("IsMovingVertical", Mathf.Abs(moveY) > 0);
 
         // Определяем направление взгляда и устанавливаем параметр анимации
-        if (moveX > 0)
+        if (moveX > 0.1f)
         {
             // Вправо
             headAnimator.SetFloat("LookDirection", 1f);
         }
-        else if (moveX < 0)
+        else if (moveX < -0.1f)
         {
             // Влево
             headAnimator.SetFloat("LookDirection", -1f);
@@ -88,10 +92,28 @@ public class PlayerController : MonoBehaviour
             headAnimator.SetFloat("LookDirection", 0f);
         }
 
+        // Определяем вертикальное направление
+        if (moveY > 0.1f)
+        {
+            verticalLookDirection = 1f;
+        }
+        else if (moveY < -0.1f)
+        {
+            verticalLookDirection = -1f;
+        }
+        else
+        {
+            verticalLookDirection = 0f;
+        }
+
+        // Устанавливаем параметр для аниматора
+        headAnimator.SetFloat("VerticalLookDirection", verticalLookDirection);
+
         // Устанавливаем параметры анимации для тела
-        bodyAnimator.SetBool("IsMovingHorizontal", moveX != 0 || moveY != 0);
-        bodyAnimator.SetBool("IsMovingVertical", moveY != 0);
+        bodyAnimator.SetBool("IsMovingHorizontal", Mathf.Abs(moveX) > 0 || Mathf.Abs(moveY) > 0);
+        bodyAnimator.SetBool("IsMovingVertical", Mathf.Abs(moveY) > 0);
     }
+    
     void Shoot()
     {
         if (pauseMenu != null && pauseMenu.IsPaused)
