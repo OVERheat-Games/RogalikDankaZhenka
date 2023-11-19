@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MoveRight
+  m_Name: MoveLeft
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -23,9 +23,9 @@ AnimationClip:
     - time: 0
       value: {fileID: -1541268621, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
     - time: 0.05
-      value: {fileID: -1541268621, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
+      value: {fileID: 176282762, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
     - time: 0.1
-      value: {fileID: -1541268621, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
+      value: {fileID: 1178330046, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
     - time: 0.13333334
       value: {fileID: -245438014, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
     - time: 0.2
@@ -59,8 +59,8 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
     - {fileID: -1541268621, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
-    - {fileID: -1541268621, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
-    - {fileID: -1541268621, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
+    - {fileID: 176282762, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
+    - {fileID: 1178330046, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
     - {fileID: -245438014, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
     - {fileID: -1468943942, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}
     - {fileID: -529298417, guid: 3f6b9e4d7f810b542bc44367ca8abc0c, type: 3}

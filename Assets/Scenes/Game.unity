@@ -4432,7 +4432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &579800539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5954,6 +5954,7 @@ MonoBehaviour:
   Hud: {fileID: 603914090}
   pauseMenuUI: {fileID: 506875011}
   spritePlay: {fileID: 2040482282}
+  Map: {fileID: 536280188}
   continueButton: {fileID: 1536773495}
   restartButton: {fileID: 1550515854}
   continueButtonText: {fileID: 1003695335}

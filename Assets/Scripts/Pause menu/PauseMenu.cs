@@ -4,6 +4,7 @@ using UnityEngine.Video;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
+using System.Security.Permissions;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject Hud;
     public GameObject pauseMenuUI;
     public GameObject spritePlay;
+    public GameObject Map;
 
     public Button continueButton;
     public Button restartButton;
@@ -120,6 +122,7 @@ public class PauseMenu : MonoBehaviour
 
         if (isPaused)
         {
+            Map.SetActive(false);
             musicGame.PauseAudio();
             startPause.Play();
             soundPause.Play();
@@ -161,6 +164,7 @@ public class PauseMenu : MonoBehaviour
             restartButton.gameObject.SetActive(false);
 
             spritePlay.SetActive(true);
+            Map.SetActive(true);
         }
     }
 
