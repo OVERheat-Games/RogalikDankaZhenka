@@ -10,7 +10,7 @@ public class PauseMenu : MonoBehaviour
 {
     
     [SerializeField]private AudioSource restartButtonSound;
-    public MusicGame musicGame;
+    public MusicManagers gameMusic;
     public AudioSource EndPause;
     public AudioSource startPause;
     public AudioSource soundPause;
@@ -123,7 +123,7 @@ public class PauseMenu : MonoBehaviour
         if (isPaused)
         {
             Map.SetActive(false);
-            musicGame.PauseAudio();
+            gameMusic.PauseGameMusic();
             startPause.Play();
             soundPause.Play();
             Time.timeScale = 0f;
@@ -153,7 +153,7 @@ public class PauseMenu : MonoBehaviour
                 endPauseAudioPlayed = true;
             }
 
-            musicGame.PlayAudio();
+            gameMusic.PlayGameMusic();
             Time.timeScale = 1f;
             pauseMenuUI.SetActive(false);
             videoPlayer.Pause();
@@ -173,7 +173,7 @@ public class PauseMenu : MonoBehaviour
         EndPause.Play();
         Time.timeScale = 1f;
         pauseMenuUI.SetActive(false);
-        musicGame.PlayAudio();
+        gameMusic.PlayGameMusic();
 
         if (videoPlayer.isActiveAndEnabled)
         {

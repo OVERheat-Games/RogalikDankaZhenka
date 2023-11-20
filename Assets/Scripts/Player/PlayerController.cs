@@ -71,25 +71,24 @@ public class PlayerController : MonoBehaviour
         Vector2 moveDirection = new Vector2(moveX, moveY).normalized;
         rb.velocity = moveDirection * moveSpeed;
 
-        // Устанавливаем параметры анимации для головы
-        headAnimator.SetBool("IsMovingHorizontal", Mathf.Abs(moveX) > 0);
-        headAnimator.SetBool("IsMovingVertical", Mathf.Abs(moveY) > 0);
-
         // Определяем направление взгляда и устанавливаем параметр анимации
         if (moveX > 0.1f)
         {
             // Вправо
             headAnimator.SetFloat("LookDirection", 1f);
+            bodyAnimator.SetFloat("LookDirection", 1f);
         }
         else if (moveX < -0.1f)
         {
             // Влево
             headAnimator.SetFloat("LookDirection", -1f);
+            bodyAnimator.SetFloat("LookDirection", -1f);
         }
         else
         {
             // Стоим на месте, не двигаемся по горизонтали
             headAnimator.SetFloat("LookDirection", 0f);
+            bodyAnimator.SetFloat("LookDirection", 0f);
         }
 
         // Определяем вертикальное направление
@@ -108,10 +107,7 @@ public class PlayerController : MonoBehaviour
 
         // Устанавливаем параметр для аниматора
         headAnimator.SetFloat("VerticalLookDirection", verticalLookDirection);
-
-        // Устанавливаем параметры анимации для тела
-        bodyAnimator.SetBool("IsMovingHorizontal", Mathf.Abs(moveX) > 0 || Mathf.Abs(moveY) > 0);
-        bodyAnimator.SetBool("IsMovingVertical", Mathf.Abs(moveY) > 0);
+        bodyAnimator.SetFloat("VerticalLookDirection", verticalLookDirection);
     }
     
     void Shoot()
